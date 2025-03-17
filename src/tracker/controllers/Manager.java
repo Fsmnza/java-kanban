@@ -1,35 +1,56 @@
-import java.util.*;
+package tracker.controllers;
+
+import tracker.model.Epic;
+import tracker.model.Subtask;
+import tracker.model.Task;
+import tracker.util.Status;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Manager {
     private final HashMap<Integer, Task> task;
     private final HashMap<Integer, Subtask> subtask;
     private final HashMap<Integer, Epic> epic;
-    private static int id = 0;
+    private static int generatorId;
 
-    public Manager(HashMap<Integer, Task> task, HashMap<Integer, Subtask> subtask, HashMap<Integer, Epic> epic) {
-        this.task = task;
-        this.subtask = subtask;
-        this.epic = epic;
-    }
-
-    public static int idCounter() {
-        return id++;
+    public Manager() {
+        task = new HashMap<>();
+        subtask = new HashMap<>();
+        epic = new HashMap<>();
     }
 
     public void createTask(Task tasks) {
-        task.put(tasks.getTaskId(), tasks);
+        final int id = ++generatorId;
+        tasks.setTaskId(id);
+        task.put(id, tasks);
     }
 
-    public Map<Integer, Task> getAllTask() {
-        Map<Integer, Task> allTasks = new HashMap<>();
-        allTasks.putAll(task);
-        allTasks.putAll(subtask);
-        allTasks.putAll(epic);
-        return allTasks;
+    public ArrayList<Task> getTasks() {
+        return new ArrayList<>(task.values());
     }
 
-    public void removeAll() {
+    public ArrayList<Subtask> getSubtasks() {
+        return new ArrayList<>(subtask.values());
+    }
+
+    public ArrayList<Epic> getEpics() {
+        return new ArrayList<>(epic.values());
+    }
+
+    public void removeAllTAsk() {
         task.clear();
+    }
+
+    public void removeAllSubtask() {
+        for (Epic epics : epic.values()) {
+            epics.getSubtaskId().clear();
+            updateEpicStatus(epics);
+        }
+        subtask.clear();
+    }
+
+    public void removeAllEpic() {
         epic.clear();
         subtask.clear();
     }
@@ -50,13 +71,19 @@ public class Manager {
     }
 
     public void createEpic(Epic epics) {
-        epic.put(epics.getTaskId(), epics);
+        int id = ++generatorId;
+        epics.setTaskId(id);
+        epic.put(id, epics);
+
     }
 
     public void createSubtask(Subtask subtasks) {
-        subtask.put(subtasks.getTaskId(), subtasks);
-        Epic epics = epic.get(subtasks.getSubtaskId());
+        final int id = ++generatorId;
+        subtasks.setTaskId(id);
+        subtask.put(id, subtasks);
+        Epic epics = epic.get(subtasks.getEpicID());
         if (epics != null) {
+            epics.addSubtaskId(id);
             updateEpicStatus(epics);
         }
     }
@@ -72,7 +99,7 @@ public class Manager {
         if (subtask.containsKey(subtasks.getTaskId())) {
             subtask.put(subtasks.getTaskId(), subtasks);
         }
-        Epic epics = epic.get(subtasks.getSubtaskId());
+        Epic epics = epic.get(subtasks.getEpicID());
         if (epics != null) {
             updateEpicStatus(epics);
         }
@@ -80,12 +107,23 @@ public class Manager {
     }
 
     public void removeSubtask(int id) {
-        subtask.remove(id);
-
+        Subtask subtasks = subtask.remove(id);
+        if (subtasks != null) {
+            Epic epics = epic.get(subtasks.getEpicID());
+            if (epics != null) {
+                epic.get(id);
+                updateEpicStatus(epics);
+            }
+        }
     }
 
     public void removeEpic(int id) {
-        epic.remove(id);
+        final Epic epics = epic.remove(id);
+        if (epics != null) {
+            for (Integer subtaskId : epics.getSubtaskId()) {
+                subtask.remove(subtaskId);
+            }
+        }
     }
 
     public Subtask getSubtaskById(int id) {
@@ -97,7 +135,7 @@ public class Manager {
     }
 
     private void updateEpicStatus(Epic epic) {
-        ArrayList<Integer> epicIds = epic.getEpicId();
+        ArrayList<Integer> epicIds = epic.getSubtaskId();
         if (epicIds.isEmpty()) {
             epic.setStatus(Status.NEW);
             return;

@@ -1,10 +1,14 @@
+package tracker.model;
+
+import tracker.util.Status;
+
 import java.util.Objects;
 
 public class Task {
-    int taskId;
-    String name;
-    String description;
-    Status status;
+    private int taskId;
+    private String name;
+    private String description;
+    private Status status;
 
     public Task(String name, String description, int taskId, Status status) {
         this.name = name;
@@ -29,6 +33,10 @@ public class Task {
 
     public Integer getTaskId() {
         return taskId;
+    }
+
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
     }
 
     public Status getStatus() {
