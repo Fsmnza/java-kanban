@@ -35,8 +35,9 @@ public class Task {
         return taskId;
     }
 
-    public void setTaskId(int taskId) {
+    public int setTaskId(int taskId) {
         this.taskId = taskId;
+        return taskId;
     }
 
     public Status getStatus() {
