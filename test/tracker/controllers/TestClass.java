@@ -104,11 +104,6 @@ class TestClass {
 
     }
 
-//    @AfterEach
-//    void afterEach() {
-//        System.out.println("After each "+this);
-//    }
-
     @Test
     void newTaskDidntChangeAfterNewData() {
         var manager = new InMemoryTaskManager();
@@ -121,6 +116,6 @@ class TestClass {
         historyManager.add(task2);
         taskId.setStatus(Status.DONE);
         List<Task> history = historyManager.getHistory();
-        assertEquals(Status.IN_PROGRESS, history.get(0).getStatus()); //когда совместно идет тест падает, а отдельно все ок
+        assertEquals(Status.IN_PROGRESS, history.get(0).getStatus());
     }
 }

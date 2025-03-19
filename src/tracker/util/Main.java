@@ -23,5 +23,6 @@ public class Main {
         Task task5 = manager.getTaskById(1);
         System.out.println(subtask1);
         System.out.println(subtask2);
+        System.out.println("История: " + manager.getHistory());
     }
 }
