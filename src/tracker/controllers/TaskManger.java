@@ -17,9 +17,9 @@ public interface TaskManger {
 
     ArrayList<Epic> getEpics();
 
-    void removeAllTAsk();
+    void removeAllTasks();
 
-    void removeAllSubtask();
+    void removeAllSubtasks();
 
     void removeAllEpic();
 
@@ -46,5 +46,8 @@ public interface TaskManger {
     Epic getEpicById(int id);
 
     void updateEpicStatus(Epic epic);
+
     List<Task> getHistory();
+
+    void toZero();
 }

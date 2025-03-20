@@ -10,13 +10,6 @@ public class Task {
     private String description;
     private Status status;
 
-    public Task(String name, String description, int taskId, Status status) {
-        this.name = name;
-        this.description = description;
-        this.taskId = taskId;
-        this.status = status;
-    }
-
     public Task(String name, String description, Status status) {
         this.name = name;
         this.description = description;

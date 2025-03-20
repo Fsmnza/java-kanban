@@ -1,5 +1,6 @@
-package tracker.controllers;
+package tracker.controllers.impl;
 
+import tracker.controllers.HistoryManager;
 import tracker.model.Task;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +13,14 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public void add(Task task) {
+    public boolean add(Task task) { // null
         if (history.size() > 10) {
             history.removeFirst();
         }
-        if (task != null) {
-            history.add(task);
+        if (task == null) {
+            return false;
         }
+        return history.add(task);
     }
 
     @Override

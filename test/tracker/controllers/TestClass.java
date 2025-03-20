@@ -1,6 +1,9 @@
 package tracker.controllers;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tracker.controllers.impl.InMemoryHistoryManager;
+import tracker.controllers.impl.InMemoryTaskManager;
 import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Task;
@@ -12,9 +15,16 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestClass {
+    TaskManger taskManager;
+
+    @BeforeEach
+    void beforeEach(){
+        System.out.println("Before each "+ this);
+        taskManager = new InMemoryTaskManager();
+        taskManager.toZero();
+    }
     @Test
     void addNewTaskToCheckTheirId() {
-        var taskManager = new InMemoryTaskManager();
         Task task1 = new Task("Написать тесты", "Определиться что такое тесты", Status.NEW);
         Task task2 = new Task("Понять что такое AssertJ & Hamcrest", "Это библиотека", Status.DONE);
         int taskId = task1.setTaskId(1);
@@ -24,7 +34,6 @@ class TestClass {
 
     @Test
     void epicIdAndSubtaskId() {
-        var taskManager = new InMemoryTaskManager();
         Epic epic = new Epic("Сходить за хлебом", "Одеться", Status.NEW);
         Subtask subtask = new Subtask("Test addNewTask", "Test addNewTask description", Status.NEW, epic.getTaskId());
         int epicId = epic.setTaskId(1);
@@ -59,7 +68,6 @@ class TestClass {
 
     @Test
     void addTaskDifferentTypeAndDetId() {
-        var taskManager = new InMemoryTaskManager();
         Task task = new Task("Сдать фз сегодня", "Дописать тесты", Status.IN_PROGRESS);
         taskManager.createTask(task);
         int taskId = task.getTaskId();
@@ -69,7 +77,6 @@ class TestClass {
 
     @Test
     void checkingEverythingIsCorrect() {
-        var taskManager = new InMemoryTaskManager();
         Epic epic1 = new Epic("Сходить за хлебом", "Одеться", Status.NEW);
         int epicId = taskManager.createEpic(epic1);
         Task task1 = new Task("Купить корм", "Сьездть в зоо магазин", Status.IN_PROGRESS);
@@ -83,12 +90,11 @@ class TestClass {
 
     @Test
     void tasksWithManualAndGeneratedIdDoNotConflict() {
-        TaskManger manager = new InMemoryTaskManager();
         Task task = new Task("Приготовить плов", "Купить овощи", Status.NEW);
         task.setTaskId(1);
-        manager.createTask(task);
+        taskManager.createTask(task);
         Task task1 = new Task("Стать программистом", "Очень много работать", Status.IN_PROGRESS);
-        manager.createTask(task1);
+        taskManager.createTask(task1);
         assertNotEquals(task.getTaskId(), task1.getTaskId());
     }
 
@@ -106,16 +112,14 @@ class TestClass {
 
     @Test
     void newTaskDidntChangeAfterNewData() {
-        var manager = new InMemoryTaskManager();
-        var historyManager = new InMemoryHistoryManager();
         Task task1 = new Task("Стать программистом", "Очень много работать", Status.IN_PROGRESS);
-        manager.createTask(task1);
-        Task taskId = manager.getTaskById(1);
-        Task task2 = new Task(task1.getName(), task1.getDescription(), task1.getStatus());
-        task2.setTaskId(task1.getTaskId());
-        historyManager.add(task2);
-        taskId.setStatus(Status.DONE);
-        List<Task> history = historyManager.getHistory();
-        assertEquals(Status.IN_PROGRESS, history.get(0).getStatus());
+        taskManager.createTask(task1);
+        taskManager.getTaskById(1);
+        task1 = new Task("Стать программистом", "Очень много работать", Status.DONE);
+        task1.setTaskId(1);
+        taskManager.updateTask(task1);
+        taskManager.getTaskById(1);
+        List<Task> history = taskManager.getHistory();
+        assertEquals(Status.IN_PROGRESS, history.getFirst().getStatus());
     }
 }

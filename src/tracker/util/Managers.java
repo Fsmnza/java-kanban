@@ -1,8 +1,8 @@
 package tracker.util;
 
 import tracker.controllers.HistoryManager;
-import tracker.controllers.InMemoryHistoryManager;
-import tracker.controllers.InMemoryTaskManager;
+import tracker.controllers.impl.InMemoryHistoryManager;
+import tracker.controllers.impl.InMemoryTaskManager;
 import tracker.controllers.TaskManger;
 
 public class Managers {
