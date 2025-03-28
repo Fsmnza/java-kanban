@@ -6,13 +6,11 @@ import tracker.model.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    //    private final List<Task> history;
     private Node<Task> head;
     private Node<Task> tail;
     private final Map<Integer, Node<Task>> historyMap;
 
     public InMemoryHistoryManager() {
-//        history = new ArrayList<>();
         historyMap = new LinkedHashMap<>();
     }
 
