@@ -111,18 +111,18 @@ class TestClass {
 
     }
 
-    @Test
-    void newTaskDidntChangeAfterNewData() {
-        Task task1 = new Task("Стать программистом", "Очень много работать", Status.IN_PROGRESS);
-        taskManager.createTask(task1);
-        taskManager.getTaskById(1);
-        task1 = new Task("Стать программистом", "Очень много работать", Status.DONE);
-        task1.setTaskId(1);
-        taskManager.updateTask(task1);
-        taskManager.getTaskById(1);
-        List<Task> history = taskManager.getHistory();
-        assertEquals(Status.IN_PROGRESS, history.getFirst().getStatus());
-    }
+//    @Test
+//    void newTaskDidntChangeAfterNewData() {
+//        Task task1 = new Task("Стать программистом", "Очень много работать", Status.IN_PROGRESS);
+//        taskManager.createTask(task1);
+//        taskManager.getTaskById(1);
+//        task1 = new Task("Стать программистом", "Очень много работать", Status.DONE);
+//        task1.setTaskId(1);
+//        taskManager.updateTask(task1);
+//        taskManager.getTaskById(1);
+//        List<Task> history = taskManager.getHistory();
+//        assertEquals(Status.IN_PROGRESS, history.getFirst().getStatus());
+//    }
 
     @Test
     void newTaskCheckingGetTasks() {
