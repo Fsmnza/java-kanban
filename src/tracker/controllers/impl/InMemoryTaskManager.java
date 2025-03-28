@@ -184,7 +184,8 @@ public class InMemoryTaskManager implements TaskManger {
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
-    public void toZero(){
+
+    public void toZero() {
         generatorId = 0;
     }
 }
