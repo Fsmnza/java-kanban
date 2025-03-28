@@ -6,13 +6,14 @@ import tracker.model.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final List<Task> history;
+    //    private final List<Task> history;
     private Node<Task> head;
     private Node<Task> tail;
-    private final Map<Integer, Node<Task>> historyMap = new LinkedHashMap<>();
+    private final Map<Integer, Node<Task>> historyMap;
 
     public InMemoryHistoryManager() {
-        history = new ArrayList<>();
+//        history = new ArrayList<>();
+        historyMap = new LinkedHashMap<>();
     }
 
     @Override
@@ -22,11 +23,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
         remove(task.getTaskId());
         linkLast(task);
-        if (history.size() > 10) {
-            history.remove(0);
+        if (historyMap.size() > 10) {
+            remove(head.task.getTaskId());
         }
-        history.add(task);
-        historyMap.put(task.getTaskId(), tail);
         return true;
     }
 
@@ -42,16 +41,15 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     public void linkLast(Task task) {
-        final Node<Task> oldTail = tail;
-        final Node<Task> oldNode = new Node<>(task);
-        tail = oldNode;
-        historyMap.put(task.getTaskId(), oldNode);
-        if (oldTail == null) {
-            head = oldNode;
+        final Node<Task> oldTail = new Node<>(task);
+        if (tail == null) {
+            head = oldTail;
         } else {
-            oldTail.next = oldNode;
-            oldNode.prev = oldTail;
+            tail.next = oldTail;
+            oldTail.prev = tail;
         }
+        tail = oldTail;
+        historyMap.put(task.getTaskId(), oldTail);
     }
 
     public List<Task> getTasks() {
@@ -80,12 +78,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             tail = node.prev;
         }
         historyMap.remove(id);
-        for (int i = 0; i < history.size(); i++) {
-            if (history.get(i).getTaskId() == id) {
-                history.remove(i);
-                break;
-            }
-        }
     }
 }
 
