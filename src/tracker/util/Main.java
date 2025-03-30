@@ -35,19 +35,14 @@ public class Main {
         manager.getTaskById(1);
         manager.getTaskById(2);
         manager.getTaskById(1);
-
         System.out.println("История: " + manager.getHistory());
         System.out.println(manager.getHistory().size());
-        historyManager.remove(3);
-        historyManager.remove(4);
-        historyManager.remove(6);
-        historyManager.remove(5);
+        historyManager.remove(1);
+        manager.removeTask(3);
+        manager.removeSubtask(4);
+        manager.removeEpic(7);
         System.out.println("Проверка на сабтаск " + manager.getSubtasks());
         System.out.println("История: " + manager.getHistory());
         System.out.println(manager.getHistory().size());
-
-
     }
-
-
 }

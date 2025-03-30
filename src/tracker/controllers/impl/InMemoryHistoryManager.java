@@ -6,9 +6,9 @@ import tracker.model.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private Node<Task> head;
-    private Node<Task> tail;
-    private final Map<Integer, Node<Task>> historyMap;
+    private Node head;
+    private Node tail;
+    private final Map<Integer, Node> historyMap;
 
     public InMemoryHistoryManager() {
         historyMap = new LinkedHashMap<>();
@@ -21,9 +21,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
         remove(task.getTaskId());
         linkLast(task);
-        if (historyMap.size() > 10) {
-            remove(head.task.getTaskId());
-        }
         return true;
     }
 
@@ -32,14 +29,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         return getTasks();
     }
 
-    @Override
-    public void remove(int id) {
-        removeNode(id);
-
-    }
-
-    public void linkLast(Task task) {
-        final Node<Task> oldTail = new Node<>(task);
+    private void linkLast(Task task) {
+        final Node oldTail = new Node(task);
         if (tail == null) {
             head = oldTail;
         } else {
@@ -47,12 +38,12 @@ public class InMemoryHistoryManager implements HistoryManager {
             oldTail.prev = tail;
         }
         tail = oldTail;
-        historyMap.put(task.getTaskId(), oldTail);
+        historyMap.put(task.getTaskId(), tail);
     }
 
-    public List<Task> getTasks() {
+    private List<Task> getTasks() {
         List<Task> newTask = new ArrayList<>();
-        Node<Task> curHead = head;
+        Node curHead = head;
         while (curHead != null) {
             newTask.add(curHead.task);
             curHead = curHead.next;
@@ -60,8 +51,13 @@ public class InMemoryHistoryManager implements HistoryManager {
         return newTask;
     }
 
+    @Override
+    public void remove(int id) {
+        removeNode(id);
+    }
+
     private void removeNode(int id) {
-        Node<Task> node = historyMap.get(id);
+        Node node = historyMap.get(id);
         if (node == null) {
             return;
         }
@@ -76,6 +72,18 @@ public class InMemoryHistoryManager implements HistoryManager {
             tail = node.prev;
         }
         historyMap.remove(id);
+    }
+}
+
+class Node {
+    Task task;
+    public Node prev;
+    public Node next;
+
+    public Node(Task task) {
+        this.task = task;
+        this.prev = null;
+        this.next = null;
     }
 }
 
