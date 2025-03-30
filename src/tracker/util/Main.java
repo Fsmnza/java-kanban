@@ -8,7 +8,6 @@ import tracker.model.Task;
 public class Main {
     public static void main(String[] args) {
         TaskManger manager = Managers.getDefault();
-        HistoryManager historyManager = Managers.getDefaultHistory();
         Task task1 = new Task("Переезд", "Собирать коробки", Status.NEW);
         Task task2 = new Task("Купить хлеб", "Сходить в магазин", Status.IN_PROGRESS);
         manager.createTask(task1);
@@ -37,7 +36,6 @@ public class Main {
         manager.getTaskById(1);
         System.out.println("История: " + manager.getHistory());
         System.out.println(manager.getHistory().size());
-        historyManager.remove(1);
         manager.removeTask(3);
         manager.removeSubtask(4);
         manager.removeEpic(7);
