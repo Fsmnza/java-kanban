@@ -43,6 +43,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         tail = oldTail;
         historyMap.put(task.getTaskId(), tail);
     }
+
     private List<Task> getTasks() {
         List<Task> newTask = new ArrayList<>();
         Node curHead = head;
