@@ -108,29 +108,4 @@ class TestClass {
         assertEquals(task1.getStatus(), taskId.getStatus());
 
     }
-//    @Test
-//    void newTaskCheckingGetTasks() {
-//        var get = new InMemoryHistoryManager();
-//        Task task1 = new Task("Стать программистом", "Очень много работать", Status.IN_PROGRESS);
-//        get.linkLast(task1);
-//        List<Task> newGetTask = get.getTasks();
-//        assertEquals(1, newGetTask.size());
-//        assertEquals(task1, newGetTask.get(0));
-//    }
-//
-//    @Test
-//    void newTaskCheckingLinkLast() {
-//        var link = new InMemoryHistoryManager();
-//        Task task1 = new Task("Стать программистом", "Очень много работать", Status.IN_PROGRESS);
-//        link.linkLast(task1);
-//    }
-//
-//    @Test
-//    void newTaskCheckingRemove() {
-//        var removeTask = new InMemoryHistoryManager();
-//        Task task1 = new Task("Стать программистом", "Очень много работать", Status.IN_PROGRESS);
-//        removeTask.linkLast(task1);
-//        removeTask.remove(0);
-//        assertTrue(removeTask.getTasks().isEmpty());
-//    }
 }
