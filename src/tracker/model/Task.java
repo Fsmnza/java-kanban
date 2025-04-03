@@ -1,6 +1,7 @@
 package tracker.model;
 
 import tracker.util.Status;
+import tracker.util.Type;
 
 import java.util.Objects;
 
@@ -9,11 +10,18 @@ public class Task {
     private String name;
     private String description;
     private Status status;
+    private Type type;
 
-    public Task(String name, String description, Status status) {
+    public Task(int taskId, Type type, String name, Status status,  String description) {
+        this.taskId = taskId;
         this.name = name;
         this.description = description;
         this.status = status;
+        this.type = type;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     public String getName() {
