@@ -15,11 +15,11 @@ import java.util.Map;
 import static tracker.util.Managers.getDefaultHistory;
 
 public class InMemoryTaskManager implements TaskManger {
-    private final Map<Integer, Task> task;
-    private final Map<Integer, Subtask> subtask;
-    private final Map<Integer, Epic> epic;
+    final Map<Integer, Task> task;
+    final Map<Integer, Subtask> subtask;
+    final Map<Integer, Epic> epic;
     private final HistoryManager historyManager;
-    private static int generatorId;
+    static int generatorId;
 
     public InMemoryTaskManager() {
         task = new HashMap<>();
