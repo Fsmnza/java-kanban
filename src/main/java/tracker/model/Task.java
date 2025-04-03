@@ -1,7 +1,7 @@
-package tracker.model;
+package main.java.tracker.model;
 
-import tracker.util.Status;
-import tracker.util.Type;
+import main.java.tracker.util.Status;
+import main.java.tracker.util.Type;
 
 import java.util.Objects;
 
@@ -21,7 +21,7 @@ public class Task {
     }
 
     public Type getType() {
-        return type;
+        return Type.TASK;
     }
 
     public String getName() {
@@ -48,7 +48,6 @@ public class Task {
     public void setStatus(Status status) {
         this.status = status;
     }
-
     @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;

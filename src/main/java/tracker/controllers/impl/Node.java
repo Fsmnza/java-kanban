@@ -1,6 +1,6 @@
-package tracker.controllers.impl;
+package main.java.tracker.controllers.impl;
 
-import tracker.model.Task;
+import main.java.tracker.model.Task;
 
 public class Node {
     public Task task;

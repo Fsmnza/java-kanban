@@ -1,14 +1,14 @@
-package tracker.controllers.impl;
+package main.java.tracker.controllers.impl;
 
-import tracker.model.Epic;
-import tracker.model.Subtask;
-import tracker.model.Task;
-import tracker.util.Status;
-import tracker.util.Type;
+import main.java.tracker.exceptions.ManagerSaveException;
+import main.java.tracker.model.Epic;
+import main.java.tracker.model.Subtask;
+import main.java.tracker.model.Task;
+import main.java.tracker.util.Status;
+import main.java.tracker.util.Type;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -21,25 +21,36 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public FileBackedTaskManager(String newFile) {
         this.file = new File(newFile);
     }
-
     public void save() {
-        try (BufferedWriter br = new BufferedWriter(new FileWriter(file))) {
-            br.write("id,type,name,status,description,epic");
-            br.newLine();
-            for (Task tasks : task.values()) {
-                br.write(toString(tasks));
+        Path temporaryFile = null;
+        try {
+            temporaryFile = Files.createTempFile("data", ".csv");
+            try (BufferedWriter br = Files.newBufferedWriter(temporaryFile, StandardCharsets.UTF_8)) {
+                br.write("id,type,name,status,description,epic");
                 br.newLine();
+                for (Task tasks : task.values()) {
+                    br.write(toString(tasks));
+                    br.newLine();
+                }
+                for (Epic epics : epic.values()) {
+                    br.write(toString(epics));
+                    br.newLine();
+                }
+                for (Subtask subtasks : subtask.values()) {
+                    br.write(toString(subtasks));
+                    br.newLine();
+                }
             }
-            for (Epic epics : epic.values()) {
-                br.write(toString(epics));
-                br.newLine();
-            }
-            for (Subtask subtasks : subtask.values()) {
-                br.write(toString(subtasks));
-                br.newLine();
-            }
+            Files.move(temporaryFile, file.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException exception) {
-            System.out.println("Ошибка при сохранении задач: " + exception.getMessage());
+            if (temporaryFile != null) {
+                try {
+                    Files.deleteIfExists(temporaryFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            throw new ManagerSaveException("Ошибка при сохранении задач: " + exception.getMessage());
         }
     }
 
@@ -66,7 +77,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public String toString(Task tasks) {
 //        String line;
-        if (tasks instanceof Subtask) {
+        if (tasks.getType() == Type.SUBTASK) {
             Subtask subtasks = (Subtask) tasks;
             return String.format("%d,%s,%s,%s,%s,%d",
                     subtasks.getTaskId(),
@@ -112,6 +123,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public static FileBackedTaskManager loadFromFile(File file) throws IOException {
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file.getPath());
         Path files = file.toPath();
+        int maxId = 0;
         List<String> lines = Files.readAllLines(files, StandardCharsets.UTF_8);
         if (lines.isEmpty()) {
             return fileBackedTaskManager;
@@ -119,31 +131,40 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             for (int i = 1; i < lines.size(); i++) {
                 String taskLine = lines.get(i);
                 Task task = fromString(taskLine);
-                if (task instanceof Epic) {
-                    fileBackedTaskManager.epic.put(task.getTaskId(), (Epic) task);
+                int taskId = task.getTaskId();
+                maxId = Math.max(maxId, taskId);
+                if (task.getType() == Type.EPIC) {
+                    fileBackedTaskManager.epic.put(taskId, (Epic) task);
                 } else if (task instanceof Subtask) {
-                    fileBackedTaskManager.subtask.put(task.getTaskId(), (Subtask) task);
+                    fileBackedTaskManager.subtask.put(taskId, (Subtask) task);
                 } else {
-                    fileBackedTaskManager.task.put(task.getTaskId(), task);
+                    fileBackedTaskManager.task.put(taskId, task);
                 }
             }
         }
+        fileBackedTaskManager.setNextTaskId(maxId + 1);
         return fileBackedTaskManager;
     }
-
-    public static void clearFile(String filePath) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            writer.write("");
-        } catch (IOException exception) {
-            System.out.println("Ошибка при очистке файла: " + exception.getMessage());
-        }
-    }
+//
+//    public static void clearFile(String filePath) {
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+//            writer.write("");
+//        } catch (IOException exception) {
+//            throw new ManagerSaveException("Ошибка при очистке файла: " + exception.getMessage());
+//        }
+//    }
 
     public static void main(String[] args) throws IOException {
         FileBackedTaskManager manager = new FileBackedTaskManager("data.csv");
-        String newFilePath = "data.csv";
-        clearFile(newFilePath);
-        System.out.println("Файл очищен.");
+//        String newFilePath = "data.csv";
+//        clearFile(newFilePath);
+//        System.out.println("Файл очищен.");
+        try (BufferedWriter writer = new BufferedWriter(Files.newBufferedWriter(Path.of("data.csv"), StandardCharsets.UTF_8))) {
+            writer.write("id,type,name,status,description,epic");
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("Csv файл до введение информации:");
         try {
             System.out.println(Files.readString(new File("data.csv").toPath()));

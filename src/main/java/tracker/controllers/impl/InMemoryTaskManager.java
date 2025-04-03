@@ -1,25 +1,25 @@
-package tracker.controllers.impl;
+package main.java.tracker.controllers.impl;
 
-import tracker.controllers.HistoryManager;
-import tracker.controllers.TaskManger;
-import tracker.model.Epic;
-import tracker.model.Subtask;
-import tracker.model.Task;
-import tracker.util.Status;
+import main.java.tracker.controllers.HistoryManager;
+import main.java.tracker.controllers.TaskManger;
+import main.java.tracker.model.Epic;
+import main.java.tracker.model.Subtask;
+import main.java.tracker.model.Task;
+import main.java.tracker.util.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static tracker.util.Managers.getDefaultHistory;
+import static main.java.tracker.util.Managers.getDefaultHistory;
 
 public class InMemoryTaskManager implements TaskManger {
     final Map<Integer, Task> task;
     final Map<Integer, Subtask> subtask;
     final Map<Integer, Epic> epic;
     private final HistoryManager historyManager;
-    static int generatorId;
+    private int generatorId;
 
     public InMemoryTaskManager() {
         task = new HashMap<>();
@@ -191,12 +191,13 @@ public class InMemoryTaskManager implements TaskManger {
         }
     }
 
+    public void setNextTaskId(int nextId) {
+        this.generatorId = nextId;
+    }
+
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 
-    public void toZero() {
-        generatorId = 0;
-    }
 }

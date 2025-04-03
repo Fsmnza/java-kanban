@@ -1,8 +1,8 @@
-package tracker.controllers;
+package main.java.tracker.controllers;
 
-import tracker.model.Epic;
-import tracker.model.Subtask;
-import tracker.model.Task;
+import main.java.tracker.model.Epic;
+import main.java.tracker.model.Subtask;
+import main.java.tracker.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,5 +49,4 @@ public interface TaskManger {
 
     List<Task> getHistory();
 
-    void toZero();
 }

@@ -1,9 +1,12 @@
-package tracker.controllers.impl;
+package main.java.tracker.controllers.impl;
 
-import tracker.controllers.HistoryManager;
-import tracker.model.Task;
+import main.java.tracker.controllers.HistoryManager;
+import main.java.tracker.model.Task;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private Node head;
@@ -40,7 +43,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         tail = oldTail;
         historyMap.put(task.getTaskId(), tail);
     }
-
     private List<Task> getTasks() {
         List<Task> newTask = new ArrayList<>();
         Node curHead = head;

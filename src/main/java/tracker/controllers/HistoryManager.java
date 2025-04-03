@@ -1,6 +1,6 @@
-package tracker.controllers;
+package main.java.tracker.controllers;
 
-import tracker.model.Task;
+import main.java.tracker.model.Task;
 
 import java.util.List;
 

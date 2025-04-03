@@ -1,7 +1,7 @@
-package tracker.model;
+package main.java.tracker.model;
 
-import tracker.util.Status;
-import tracker.util.Type;
+import main.java.tracker.util.Status;
+import main.java.tracker.util.Type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,10 @@ public class Epic extends Task {
         return subtaskIds;
     }
 
+    @Override
+    public Type getType() {
+        return Type.EPIC;
+    }
     @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;

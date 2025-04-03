@@ -1,20 +1,25 @@
-package tracker.model;
+package main.java.tracker.model;
 
-import tracker.util.Status;
-import tracker.util.Type;
+import main.java.tracker.util.Status;
+import main.java.tracker.util.Type;
 
 import java.util.Objects;
 
 public class Subtask extends Task {
     int epicId;
 
-    public Subtask(int id, Type type, String name,Status status, String description, int epicId) {
-        super(id, type, name,status, description);
+    public Subtask(int id, Type type, String name, Status status, String description, int epicId) {
+        super(id, type, name, status, description);
         this.epicId = epicId;
     }
 
     public int getEpicID() {
         return epicId;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.SUBTASK;
     }
 
     @Override
@@ -29,6 +34,7 @@ public class Subtask extends Task {
     public int hashCode() {
         return Objects.hash(super.hashCode(), epicId);
     }
+
 
     @Override
     public String toString() {
