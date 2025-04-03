@@ -12,7 +12,7 @@ public class Task {
     private Status status;
     private Type type;
 
-    public Task(int taskId, Type type, String name, Status status,  String description) {
+    public Task(int taskId, Type type, String name, Status status, String description) {
         this.taskId = taskId;
         this.name = name;
         this.description = description;
@@ -48,6 +48,7 @@ public class Task {
     public void setStatus(Status status) {
         this.status = status;
     }
+
     @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;

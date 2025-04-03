@@ -11,8 +11,8 @@ import java.util.Objects;
 public class Epic extends Task {
     List<Integer> subtaskIds;
 
-    public Epic(int id, Type type, String name,Status status, String description) {
-        super(id, type, name,status, description);
+    public Epic(int id, Type type, String name, Status status, String description) {
+        super(id, type, name, status, description);
         subtaskIds = new ArrayList<>();
     }
 
@@ -24,6 +24,7 @@ public class Epic extends Task {
     public Type getType() {
         return Type.EPIC;
     }
+
     @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;
