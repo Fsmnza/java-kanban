@@ -1,4 +1,1 @@
 id,type,name,status,description,epic
-1,TASK,Приготовить обед,NEW,Почистить картошку
-2,EPIC,Переезд,NEW,Собрать вещи
-3,SUBTASK,Собрать коробки,NEW,Найти коробки,2

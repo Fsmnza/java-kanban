@@ -42,7 +42,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     br.newLine();
                 }
             }
-            Files.move(temporaryFile, file.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException exception) {
             if (temporaryFile != null) {
                 try {
@@ -77,7 +76,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public String toString(Task tasks) {
-//        String line;
         if (tasks.getType() == Type.SUBTASK) {
             Subtask subtasks = (Subtask) tasks;
             return String.format("%d,%s,%s,%s,%s,%d",
@@ -146,20 +144,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         fileBackedTaskManager.setNextTaskId(maxId + 1);
         return fileBackedTaskManager;
     }
-//
-//    public static void clearFile(String filePath) {
-//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-//            writer.write("");
-//        } catch (IOException exception) {
-//            throw new ManagerSaveException("Ошибка при очистке файла: " + exception.getMessage());
-//        }
-//    }
 
     public static void main(String[] args) throws IOException {
         FileBackedTaskManager manager = new FileBackedTaskManager("data.csv");
-//        String newFilePath = "data.csv";
-//        clearFile(newFilePath);
-//        System.out.println("Файл очищен.");
         try (BufferedWriter writer = new BufferedWriter(Files.newBufferedWriter(Path.of("data.csv"), StandardCharsets.UTF_8))) {
             writer.write("id,type,name,status,description,epic");
             writer.newLine();
