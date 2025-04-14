@@ -3,21 +3,39 @@ package main.java.tracker.model;
 import main.java.tracker.util.Status;
 import main.java.tracker.util.Type;
 
+import java.io.Serializable;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Task {
+public class Task implements Serializable {
     private int taskId;
     private String name;
     private String description;
     private Status status;
     private Type type;
+    private Duration duration;
+    private LocalDateTime startTime;
+    // TODO: реализовать метод getEndTime() на основе duration и startTime
 
-    public Task(int taskId, Type type, String name, Status status, String description) {
+    public Task(int taskId, Type type, String name, Status status, String description, LocalDateTime startTime) {
         this.taskId = taskId;
         this.name = name;
         this.description = description;
         this.status = status;
         this.type = type;
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (startTime != null && duration != null) {
+            return startTime.plus(duration);
+        }
+        return null;
     }
 
     public Type getType() {
@@ -53,12 +71,12 @@ public class Task {
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
-        return taskId == task.taskId && Objects.equals(name, task.name) && Objects.equals(description, task.description) && status == task.status;
+        return taskId == task.taskId && Objects.equals(name, task.name) && Objects.equals(description, task.description) && status == task.status && type == task.type && Objects.equals(duration, task.duration) && Objects.equals(startTime, task.startTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, taskId, status);
+        return Objects.hash(taskId, name, description, status, type, duration, startTime);
     }
 
     @Override

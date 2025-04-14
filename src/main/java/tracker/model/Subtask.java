@@ -3,14 +3,30 @@ package main.java.tracker.model;
 import main.java.tracker.util.Status;
 import main.java.tracker.util.Type;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Subtask extends Task {
     int epicId;
+    private LocalDateTime startTime;
+    private Duration duration;
 
-    public Subtask(int id, Type type, String name, Status status, String description, int epicId) {
-        super(id, type, name, status, description);
+    public Subtask(int id, Type type, String name, Status status, String description, int epicId, LocalDateTime startTime) {
+        super(id, type, name, status, description, startTime);
         this.epicId = epicId;
+    }
+
+    public int getEpicId() {
+        return epicId;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
     }
 
     public int getEpicID() {
