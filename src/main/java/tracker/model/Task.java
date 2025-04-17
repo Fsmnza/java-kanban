@@ -16,7 +16,6 @@ public class Task implements Serializable {
     private Type type;
     private Duration duration;
     private LocalDateTime startTime;
-    // TODO: реализовать метод getEndTime() на основе duration и startTime
 
     public Task(int taskId, Type type, String name, Status status, String description, LocalDateTime startTime) {
         this.taskId = taskId;
@@ -57,6 +56,14 @@ public class Task implements Serializable {
     public int setTaskId(int taskId) {
         this.taskId = taskId;
         return taskId;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public Status getStatus() {

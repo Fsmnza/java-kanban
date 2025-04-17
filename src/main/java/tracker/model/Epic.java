@@ -3,7 +3,6 @@ package main.java.tracker.model;
 import main.java.tracker.util.Status;
 import main.java.tracker.util.Type;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,34 +10,12 @@ import java.util.Objects;
 
 
 public class Epic extends Task {
-    List<Integer> subtaskIds;
-    public Duration duration;
-    public LocalDateTime startTime;
-    public LocalDateTime endTime;
+    private List<Integer> subtaskIds;
+    private LocalDateTime endTime;
 
     public Epic(int id, Type type, String name, Status status, String description, LocalDateTime startTime) {
         super(id, type, name, status, description, startTime);
         subtaskIds = new ArrayList<>();
-    }
-
-    public Duration getDuration() {
-        return duration;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setSubtaskIds(List<Integer> subtaskIds) {
-        this.subtaskIds = subtaskIds;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
     }
 
     public void setEndTime(LocalDateTime endTime) {
