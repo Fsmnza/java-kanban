@@ -81,15 +81,13 @@ public class InMemoryTaskManager implements TaskManger {
         return id;
     }
 
-    public static boolean checkingIntersections(Task task1, Task task2) {
-        if (task2.getStartTime() != null || task1.getStartTime() != null) {
-            LocalDateTime startTime = task2.getStartTime();
-            LocalDateTime startTime2 = task1.getStartTime();
-            LocalDateTime endTime = task2.getEndTime();
-            LocalDateTime endTime2 = task1.getEndTime();
-            return startTime2.isBefore(endTime) && startTime.isBefore(endTime2);
+    private boolean checkingIntersections(Task newTask, Task existingTask) {
+        if (newTask.getStartTime() == null || newTask.getEndTime() == null ||
+                existingTask.getStartTime() == null || existingTask.getEndTime() == null) {
+            return false;
         }
-        return false;
+        return newTask.getStartTime().isBefore(existingTask.getEndTime()) &&
+                newTask.getEndTime().isAfter(existingTask.getStartTime());
     }
 
     public boolean taskOverlapWithAnyTask(Task newTask) {
