@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface TaskManger {
 
+    List<Task> getPrioritizedTasks();
+
     int createTask(Task tasks);
 
     ArrayList<Task> getTasks();
