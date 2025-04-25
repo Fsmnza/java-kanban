@@ -17,6 +17,7 @@ public class PrioritizedHandler extends BaseHttpHandler {
         super();
         this.taskManager = taskManager;
     }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if ("GET".equals(exchange.getRequestMethod())) {
