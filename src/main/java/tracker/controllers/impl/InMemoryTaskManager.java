@@ -89,6 +89,7 @@ public class InMemoryTaskManager implements TaskManger {
         return newTask.getStartTime().isBefore(existingTask.getEndTime()) &&
                 newTask.getEndTime().isAfter(existingTask.getStartTime());
     }
+
     @Override
     public boolean taskOverlapWithAnyTask(Task newTask) {
         List<Task> allTaskList = new ArrayList<>();
