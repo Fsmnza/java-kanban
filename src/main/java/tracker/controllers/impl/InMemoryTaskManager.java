@@ -89,7 +89,7 @@ public class InMemoryTaskManager implements TaskManger {
         return newTask.getStartTime().isBefore(existingTask.getEndTime()) &&
                 newTask.getEndTime().isAfter(existingTask.getStartTime());
     }
-
+    @Override
     public boolean taskOverlapWithAnyTask(Task newTask) {
         List<Task> allTaskList = new ArrayList<>();
         allTaskList.addAll(task.values());
@@ -112,7 +112,7 @@ public class InMemoryTaskManager implements TaskManger {
     }
 
     public void removeAllTasks() {
-        for (int id : epic.keySet()) {
+        for (Integer id : task.keySet()) {
             historyManager.remove(id);
             prioritizedTasks.remove(task.get(id));
         }

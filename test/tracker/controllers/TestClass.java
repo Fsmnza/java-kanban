@@ -44,7 +44,6 @@ public class TestClass {
         assertDoesNotThrow(() -> {
             Path tempFile = Files.createTempFile("data", ".csv");
             Files.writeString(tempFile, "Цель, попасть в FAANG!");
-            Files.delete(tempFile);
         });
     }
 }

@@ -13,6 +13,8 @@ public interface TaskManger {
 
     int createTask(Task tasks);
 
+    boolean taskOverlapWithAnyTask(Task newTask);
+
     ArrayList<Task> getTasks();
 
     ArrayList<Subtask> getSubtasks();

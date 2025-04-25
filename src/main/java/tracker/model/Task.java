@@ -26,6 +26,10 @@ public class Task implements Serializable {
         this.startTime = startTime;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
     public LocalDateTime getStartTime() {
         return startTime;
     }
