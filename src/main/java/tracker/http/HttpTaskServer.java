@@ -1,17 +1,17 @@
 package main.java.tracker.http;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
 import main.java.tracker.controllers.TaskManger;
-import main.java.tracker.controllers.TypeAdapter.DurationAdapter;
+import main.java.tracker.controllers.typeAdapter.DurationAdapter;
+import main.java.tracker.controllers.typeAdapter.LocalDateTimeAdapter;
 import main.java.tracker.util.Managers;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class HttpTaskServer {
     private static HttpServer server;
