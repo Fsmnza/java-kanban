@@ -9,7 +9,11 @@ import java.util.List;
 
 public interface TaskManger {
 
+    List<Task> getPrioritizedTasks();
+
     int createTask(Task tasks);
+
+    boolean taskOverlapWithAnyTask(Task newTask);
 
     ArrayList<Task> getTasks();
 

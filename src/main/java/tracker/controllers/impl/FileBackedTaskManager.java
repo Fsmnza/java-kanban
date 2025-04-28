@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -27,7 +28,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             temporaryFile = Files.createTempFile("data", ".csv");
             try (BufferedWriter br = Files.newBufferedWriter(temporaryFile, StandardCharsets.UTF_8)) {
-                br.write("id,type,name,status,description,epic");
+                br.write("id,type,name,status,description,epic,startTime");
                 br.newLine();
                 for (Task tasks : task.values()) {
                     br.write(toString(tasks));
@@ -78,21 +79,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public String toString(Task tasks) {
         if (tasks.getType() == Type.SUBTASK) {
             Subtask subtasks = (Subtask) tasks;
-            return String.format("%d,%s,%s,%s,%s,%d",
+            return String.format("%d,%s,%s,%s,%s,%d,%s",
                     subtasks.getTaskId(),
                     subtasks.getType(),
                     subtasks.getName(),
                     subtasks.getStatus(),
                     subtasks.getDescription(),
-                    subtasks.getEpicID()
+                    subtasks.getEpicID(),
+                    subtasks.getStartTime()
             );
         } else {
-            return String.format("%d,%s,%s,%s,%s",
+            return String.format("%d,%s,%s,%s,%s,%s",
                     tasks.getTaskId(),
                     tasks.getType(),
                     tasks.getName(),
                     tasks.getStatus(),
-                    tasks.getDescription()
+                    tasks.getDescription(),
+                    tasks.getStartTime()
             );
         }
     }
@@ -104,15 +107,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String name = newFromString[2];
         Status status = Status.valueOf(newFromString[3]);
         String description = newFromString[4];
+        LocalDateTime startTime = LocalDateTime.parse(newFromString[5]);
 
         switch (type) {
             case TASK:
-                return new Task(id, type, name, status, description);
+                return new Task(id, type, name, status, description, startTime);
             case EPIC:
-                return new Epic(id, type, name, status, description);
+                return new Epic(id, type, name, status, description, startTime);
             case SUBTASK:
-                int epicId = Integer.parseInt(newFromString[5]);
-                return new Subtask(id, type, name, status, description, epicId);
+                int epicId = Integer.parseInt(newFromString[6]);
+                return new Subtask(id, type, name, status, description, epicId, startTime);
             default:
                 throw new RuntimeException("Неизвестный тип задачи: " + type);
         }
@@ -159,13 +163,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Task task1 = new Task(1, Type.TASK, "Приготовить обед", Status.NEW, "Почистить картошку");
+        Task task1 = new Task(1, Type.TASK, "Приготовить обед", Status.NEW, "Почистить картошку", LocalDateTime.now());
         manager.createTask(task1);
 
-        Epic epic1 = new Epic(2, Type.EPIC, "Переезд", Status.NEW, "Собрать вещи");
+        Epic epic1 = new Epic(2, Type.EPIC, "Переезд", Status.NEW, "Собрать вещи", LocalDateTime.now());
         manager.createEpic(epic1);
 
-        Subtask subtask1 = new Subtask(3, Type.SUBTASK, "Собрать коробки", Status.NEW, "Найти коробки", epic1.getTaskId());
+        Subtask subtask1 = new Subtask(3, Type.SUBTASK, "Собрать коробки", Status.NEW, "Найти коробки", epic1.getTaskId(), LocalDateTime.now());
         manager.createSubtask(subtask1);
 
         System.out.println("Csv файл после введение информации:");
@@ -185,6 +189,5 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         for (Epic epic2 : loadedManager.epic.values()) {
             System.out.println(epic2);
         }
-
     }
 }
