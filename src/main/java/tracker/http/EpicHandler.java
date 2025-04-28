@@ -39,7 +39,15 @@ public class EpicHandler extends BaseHttpHandler {
     protected void processPost(HttpExchange exchange) throws IOException, NotFoundException {
         InputStream is = exchange.getRequestBody();
         String json = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        if (json.isBlank()) {
+            writeToUser(exchange, "Тело запроса пустое", 400);
+            return;
+        }
         Epic epic = gson.fromJson(json, Epic.class);
+        if (epic == null) {
+            writeToUser(exchange, "Некорректный формат задачи", 400);
+            return;
+        }
         if (isTimeConflict(epic)) {
             sendHasInteractions(exchange);
             return;

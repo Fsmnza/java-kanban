@@ -4,16 +4,23 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import main.java.tracker.controllers.typeAdapter.DurationAdapter;
+import main.java.tracker.controllers.typeAdapter.LocalDateTimeAdapter;
 import main.java.tracker.exceptions.NotFoundException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public abstract class BaseHttpHandler implements HttpHandler {
-    protected final Gson gson;
+    protected static Gson gson = null;
 
     public BaseHttpHandler() {
-        this.gson = new GsonBuilder().create();
+        this.gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .registerTypeAdapter(Duration.class, new DurationAdapter())
+                .create();
     }
 
     @Override
@@ -78,5 +85,9 @@ public abstract class BaseHttpHandler implements HttpHandler {
         h.sendResponseHeaders(406, resp.length);
         h.getResponseBody().write(resp);
         h.close();
+    }
+
+    public static Gson getGson() {
+        return gson;
     }
 }

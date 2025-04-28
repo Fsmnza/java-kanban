@@ -40,7 +40,15 @@ public class SubtaskHandler extends BaseHttpHandler {
     protected void processPost(HttpExchange exchange) throws IOException, NotFoundException {
         InputStream is = exchange.getRequestBody();
         String json = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        if (json.isBlank()) {
+            writeToUser(exchange, "Тело запроса пустое", 400);
+            return;
+        }
         Subtask subtask = gson.fromJson(json, Subtask.class);
+        if (subtask == null) {
+            writeToUser(exchange, "Некорректный формат задачи", 400);
+            return;
+        }
         if (isTimeConflict(subtask)) {
             sendHasInteractions(exchange);
             return;

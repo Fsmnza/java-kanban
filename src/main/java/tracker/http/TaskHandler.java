@@ -40,7 +40,15 @@ public class TaskHandler extends BaseHttpHandler {
     protected void processPost(HttpExchange exchange) throws IOException, NotFoundException {
         InputStream is = exchange.getRequestBody();
         String json = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        if (json.isBlank()) {
+            writeToUser(exchange, "Тело запроса пустое", 400);
+            return;
+        }
         Task task = gson.fromJson(json, Task.class);
+        if (task == null) {
+            writeToUser(exchange, "Некорректный формат задачи", 400);
+            return;
+        }
         if (isTimeConflict(task)) {
             sendHasInteractions(exchange);
             return;
